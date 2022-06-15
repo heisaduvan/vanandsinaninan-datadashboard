@@ -6,7 +6,16 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+.inline-block-items{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.inline-block-items > h4, p{
+  display: inline-block !important;
+  margin:10px;
+  padding:0;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
