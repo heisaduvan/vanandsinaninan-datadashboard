@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import AppBar from "./AppBar";
 import DateSelector from "./DateSelector";
 import UpdateInfos from "./UpdateInfos";
+import CollapsableDataGrid from "./DataGrid";
 const appTheme = createTheme();
 
 export default function Home(props) {
@@ -51,7 +52,7 @@ export default function Home(props) {
                 <UpdateInfos/>
               </Grid>
               <Grid item xs={12}>
-                <h1 style={{color:'red'}}>Here will be a data grid. But it is not ready for now. I wonder if you like the date picker. </h1>
+                <CollapsableDataGrid></CollapsableDataGrid>
               </Grid>
             </Grid>
           </Container>
