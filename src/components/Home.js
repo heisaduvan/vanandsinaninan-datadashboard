@@ -27,7 +27,7 @@ export default function Home(props) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Data Dashboard
+              TONIC Intraday Reporting
             </Typography>
           </Toolbar>
         </AppBar>
