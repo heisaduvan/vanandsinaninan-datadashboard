@@ -87,7 +87,7 @@ export default function DateSelector(props) {
         let m = new Date();
         start = new Date(m.getFullYear(), m.getMonth(), 1);
         end = new Date(new Date().getTime() - 24*60*60*1000);
-        props.changeDateRange(start,end);   
+        props.changeDateRange(start,end);
       }
     }
   };
