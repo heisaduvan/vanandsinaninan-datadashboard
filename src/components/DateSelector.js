@@ -63,6 +63,33 @@ export default function DateSelector(props) {
 
   const handleChange = (event) => {
     setDateSelectedIndex(event.target.value);
+
+    if(event.target.value === 0){
+      props.changeDate(new Date());
+    }
+    else if(event.target.value === 1){
+      props.changeDate(new Date(new Date().getTime() - 24*60*60*1000));
+    }
+    else{
+      let start;
+      let end;
+      if(event.target.value === 2){
+        start = new Date(new Date().getTime() - 3*24*60*60*1000);
+        end = new Date(new Date().getTime() - 24*60*60*1000);
+        props.changeDateRange(start,end);       
+      }
+      else if(event.target.value === 3){
+        start = new Date(new Date().getTime() - 6*24*60*60*1000);
+        end = new Date(new Date().getTime() - 24*60*60*1000);
+        props.changeDateRange(start,end);   
+      }
+      else if(event.target.value === 4){
+        let m = new Date();
+        start = new Date(m.getFullYear(), m.getMonth(), 1);
+        end = new Date(new Date().getTime() - 24*60*60*1000);
+        props.changeDateRange(start,end);   
+      }
+    }
   };
 
   const submitCustomDateRange = (value) => {
@@ -81,6 +108,8 @@ export default function DateSelector(props) {
         setDatePickerItems([...datePickerItems, string]);
     }
     setDateSelectedIndex(6);
+
+    props.changeDateRange(startDate, endDate);
   }
 
   return (

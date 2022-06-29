@@ -1,9 +1,10 @@
-const reportsTracking = require("../assets/reportsTracking.json");
-
-const createData = () => {
+// const reportsTracking = require("../assets/reportsTracking.json");
+let reportsTracking = [];
+const createData = (_reportsTracking) => {
+  reportsTracking = _reportsTracking;
   let id = 0;
   let arr = [];
-  let campaignIds = reportsTracking.map((item) => ({campaign_id: item.campaign_id, campaign_name: item.campaign_name}));
+  let campaignIds = _reportsTracking.map((item) => ({campaign_id: item.campaign_id, campaign_name: item.campaign_name}));
 
   campaignIds = [...new Set(campaignIds)];
   let distinctIdTemp = [];
@@ -26,7 +27,7 @@ const createData = () => {
     let totalClicks = 0;
     let objDaysTotalRevenueAndClicks = [];
 
-    reportsTracking.forEach((item) => {
+    _reportsTracking.forEach((item) => {
       if (item.campaign_id === campaign.campaign_id) {
         totalRevenueInCampaign += +item.revenueUsd;
         totalClicks += +item.clicks
@@ -195,7 +196,7 @@ const groupBy = function (xs, key, value) {
 
 function formatAMPM(date) {
   var hours = date.getHours();
-  var minutes = date.getMinutes();
+  // var minutes = date.getMinutes();
   var ampm = hours >= 12 ? "pm" : "am";
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'

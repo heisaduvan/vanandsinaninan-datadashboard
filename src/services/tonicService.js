@@ -1,31 +1,43 @@
+import { SettingsBackupRestoreSharp } from "@material-ui/icons";
+
 const reportTrackingPath =
-  "https://api.publisher.tonic.com/privileged/v3/reports/tracking";
-const authenticationPath = "https://api.publisher.tonic.com/jwt/authenticate";
+  "https://tonicapiv2-56z35.ondigitalocean.app/reports";
 
-const userName = "39535789572405466851";
-const password = "bb165c810c1349e61dfbd52b9fe9c47bffce76d7";
+const getDateFormat = (date) => {
+  var mm = date.getMonth() + 1; // getMonth() is zero-based
+  var dd = date.getDate();
 
-const headers = {
-  "Content-Type": "application/json",
+  return [
+    date.getFullYear(),
+    (mm > 9 ? "" : "0") + mm,
+    (dd > 9 ? "" : "0") + dd,
+  ].join("-");
 };
-const loginService = async () => {
-  const response = await fetch(authenticationPath, {
-    method: "POST",
-    headers: headers,
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: {
-      consumer_key: userName,
-      consumer_secret: password,
-    },
-  })
+
+// let dateRange = [];
+// let date = null;
+// let useDateRange = false;
+
+function setPropsForCallAPI(_dateRange, _date, _useDateRange) {
+  // dateRange = _dateRange;
+  // date = _date;
+  // useDateRange = _useDateRange;
+}
+
+function getReports(dateRange, date, useDateRange) {
+  let path =
+    reportTrackingPath +
+    "?from=" +
+    getDateFormat(dateRange[0]) +
+    "&to=" +
+    getDateFormat(dateRange[1]);
+  if (useDateRange) path = path + "&date=no";
+  else path = path + "&date=" + getDateFormat(date);
+
+  console.log(path);
+  return fetch(path, { method: "GET" })
     .then((res) => (res.ok ? res : Promise.reject(res)))
     .then((res) => res.json());
+}
 
-  return response;
-};
-
-export {loginService}
+export { getReports, setPropsForCallAPI };

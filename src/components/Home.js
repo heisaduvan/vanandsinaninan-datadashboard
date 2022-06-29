@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +12,19 @@ import CollapsableDataGrid from "./DataGrid";
 const appTheme = createTheme();
 
 export default function Home(props) {
+  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [date, setDate] = useState(new Date());
+  const [useDateRange, setUseDateRange] = useState(false);
+  const changeDateRange = (start, end) => {
+    setDateRange([start, end]);
+    setUseDateRange(true);
+  };
+
+  const changeDate = (date) => {
+    setDate(date);
+    setUseDateRange(false);
+  };
+
   return (
     <ThemeProvider theme={appTheme}>
       <Box sx={{ display: "flex" }}>
@@ -47,12 +60,15 @@ export default function Home(props) {
           <Toolbar />
           <Container maxWidth="xl" sx={{ mt: 2 }}>
             <Grid container spacing={2}>
-                <DateSelector></DateSelector>
+              <DateSelector
+                changeDateRange={changeDateRange}
+                changeDate={changeDate}
+              ></DateSelector>
               <Grid item xs={6}>
-                <UpdateInfos/>
+                <UpdateInfos />
               </Grid>
               <Grid item xs={12}>
-                <CollapsableDataGrid></CollapsableDataGrid>
+                <CollapsableDataGrid dateRange = {dateRange} date={date} useDateRange = {useDateRange}></CollapsableDataGrid>
               </Grid>
             </Grid>
           </Container>
