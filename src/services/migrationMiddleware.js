@@ -4,19 +4,22 @@ const createData = (_reportsTracking) => {
   reportsTracking = _reportsTracking;
   let id = 0;
   let arr = [];
-  let campaignIds = _reportsTracking.map((item) => ({campaign_id: item.campaign_id, campaign_name: item.campaign_name}));
+  let campaignIds = _reportsTracking.map((item) => ({
+    campaign_id: item.campaign_id,
+    campaign_name: item.campaign_name,
+  }));
 
   campaignIds = [...new Set(campaignIds)];
   let distinctIdTemp = [];
   let distinctCampaignTemp = [];
 
-  campaignIds.forEach(campaign => {
-    if(!distinctIdTemp.includes(campaign.campaign_id)){
+  campaignIds.forEach((campaign) => {
+    if (!distinctIdTemp.includes(campaign.campaign_id)) {
       distinctIdTemp.push(campaign.campaign_id);
       distinctCampaignTemp.push(campaign);
     }
   });
-  
+
   campaignIds = distinctCampaignTemp;
 
   campaignIds.forEach((campaign) => {
@@ -30,8 +33,12 @@ const createData = (_reportsTracking) => {
     _reportsTracking.forEach((item) => {
       if (item.campaign_id === campaign.campaign_id) {
         totalRevenueInCampaign += +item.revenueUsd;
-        totalClicks += +item.clicks
-        objDaysTotalRevenueAndClicks.push({ dateOfDay: item.date, totalRevenue: +item.revenueUsd, clicks: +item.clicks });
+        totalClicks += +item.clicks;
+        objDaysTotalRevenueAndClicks.push({
+          dateOfDay: item.date,
+          totalRevenue: +item.revenueUsd,
+          clicks: +item.clicks,
+        });
       }
     });
 
@@ -40,59 +47,65 @@ const createData = (_reportsTracking) => {
     obj.clicks = totalClicks;
     arr.push(obj);
 
-    let days = getDailyReports(objDaysTotalRevenueAndClicks, campaign.campaign_id);
+    let days = getDailyReports(
+      objDaysTotalRevenueAndClicks,
+      campaign.campaign_id
+    );
 
-    days.forEach(day => {
+    days.forEach((day) => {
       let dayObj = {
-        parentId : obj.id,
+        parentId: obj.id,
         key: day.dateOfDay,
         totalRevenue: day.totalRevenue,
         clicks: day.clicks,
-        id: id++
-      }
+        id: id++,
+      };
       arr.push(dayObj);
 
-      day.hours.forEach(hour => {
+      day.hours.forEach((hour) => {
         let hourObj = {
-          parentId : dayObj.id,
+          parentId: dayObj.id,
           key: hour.hourRange,
           totalRevenue: hour.totalRevenue,
           clicks: hour.clicks,
-          id: id++
-        }
+          id: id++,
+        };
         arr.push(hourObj);
 
-        hour.devices.forEach(device => {
+        hour.devices.forEach((device) => {
           let deviceObj = {
-            parentId : hourObj.id,
+            parentId: hourObj.id,
             key: device.deviceType,
             totalRevenue: device.totalRevenue,
             clicks: device.clicks,
-            id: id++
-          }
+            id: id++,
+          };
           arr.push(deviceObj);
         });
       });
     });
-
   });
 
-  arr.forEach(item => {
+  arr.forEach((item) => {
     let rpcValue = item.totalRevenue / item.clicks;
     item["RPC"] = +parseFloat(rpcValue).toFixed(2);
   });
 
+  console.log(arr);
   return arr;
 };
 
 const getDailyReports = (objDaysAndTotalRevenueAndClicks, campaign_id) => {
-  let dayObj = groupBy(objDaysAndTotalRevenueAndClicks, "dateOfDay", "totalRevenue");
+  let dayObj = groupBy(
+    objDaysAndTotalRevenueAndClicks,
+    "dateOfDay",
+    "totalRevenue"
+  );
   let dayObj2 = groupBy(objDaysAndTotalRevenueAndClicks, "dateOfDay", "clicks");
 
   let days = Object.keys(dayObj);
   let revenues = Object.values(dayObj);
   let clicks = Object.values(dayObj2);
-
 
   let dailyReport = [];
   days.forEach((day, index) => {
@@ -113,7 +126,7 @@ const getDailyReports = (objDaysAndTotalRevenueAndClicks, campaign_id) => {
         hours.push({
           hourRange: formatAMPM(new Date(item.timestamp)),
           totalRevenue: +parseFloat(item.revenueUsd).toFixed(2),
-          clicks : +parseFloat(item.clicks).toFixed(2),
+          clicks: +parseFloat(item.clicks).toFixed(2),
         });
       }
     });
@@ -124,34 +137,35 @@ const getDailyReports = (objDaysAndTotalRevenueAndClicks, campaign_id) => {
   return dailyReport;
 };
 
-
 const getHourlyReports = (dailyReport, hours, campaign_id, day) => {
-    let hoursObj = groupBy(hours, "hourRange", "totalRevenue");
-    let hoursObj2 = groupBy(hours, "hourRange", "clicks");
+  let hoursObj = groupBy(hours, "hourRange", "totalRevenue");
+  let hoursObj2 = groupBy(hours, "hourRange", "clicks");
 
-    let _hours = Object.keys(hoursObj);
-    let hoursRevenues = Object.values(hoursObj);
-    let hoursClicks = Object.values(hoursObj2);
+  let _hours = Object.keys(hoursObj);
+  let hoursRevenues = Object.values(hoursObj);
+  let hoursClicks = Object.values(hoursObj2);
 
-
-    _hours.forEach((hour, index) => {
-      let hourlyObj = {
-        hourRange: hour,
-        devices: [],
-        totalRevenue: +parseFloat(
-          hoursRevenues[index].reduce((partialSum, a) => partialSum + a, 0)
-        ).toFixed(2),
-        clicks : +parseFloat(
-          hoursClicks[index].reduce((partialSum, a) => partialSum + a, 0)
-        ).toFixed(2),
-      };
-
+  _hours.forEach((hour, index) => {
+    let hourlyObj = {
+      hourRange: hour,
+      devices: [],
+      totalRevenue: +parseFloat(
+        hoursRevenues[index].reduce((partialSum, a) => partialSum + a, 0)
+      ).toFixed(2),
+      clicks: +parseFloat(
+        hoursClicks[index].reduce((partialSum, a) => partialSum + a, 0)
+      ).toFixed(2),
+    };
 
     let devices = [];
     reportsTracking.forEach((item) => {
-      if (formatAMPM(new Date(item.timestamp)) === hour && item.campaign_id === campaign_id && item.date === day) {
+      if (
+        formatAMPM(new Date(item.timestamp)) === hour &&
+        item.campaign_id === campaign_id &&
+        item.date === day
+      ) {
         devices.push({
-            deviceType: item.device,
+          deviceType: item.device,
           totalRevenue: +parseFloat(item.revenueUsd).toFixed(2),
           clicks: +parseFloat(item.clicks).toFixed(2),
         });
@@ -164,29 +178,26 @@ const getHourlyReports = (dailyReport, hours, campaign_id, day) => {
     let deviceRevenues = Object.values(devicesObj);
     let deviceClicks = Object.values(devicesObj2);
 
-
-
     deviceTypes.forEach((deviceType, index) => {
-        let deviceObj = {
-          deviceType: deviceType,
-          totalRevenue: +parseFloat(
-            deviceRevenues[index].reduce((partialSum, a) => partialSum + a, 0)
-          ).toFixed(2),
-          clicks: +parseFloat(
-            deviceClicks[index].reduce((partialSum, a) => partialSum + a, 0)
-          ).toFixed(2),
-        };
+      let deviceObj = {
+        deviceType: deviceType,
+        totalRevenue: +parseFloat(
+          deviceRevenues[index].reduce((partialSum, a) => partialSum + a, 0)
+        ).toFixed(2),
+        clicks: +parseFloat(
+          deviceClicks[index].reduce((partialSum, a) => partialSum + a, 0)
+        ).toFixed(2),
+      };
 
-        hourlyObj.devices.push(deviceObj);
+      hourlyObj.devices.push(deviceObj);
     });
 
+    dailyReport.hours.push(hourlyObj);
+  });
 
+  return dailyReport;
+};
 
-      dailyReport.hours.push(hourlyObj);
-    });
-
-    return dailyReport;
-}
 const groupBy = function (xs, key, value) {
   return xs.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x[value]);

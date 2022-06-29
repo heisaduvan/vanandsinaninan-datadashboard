@@ -3,9 +3,7 @@ import "./App.css";
 import Home from "./components/Home";
 import FormDialog from "./components/FormDialog";
 function App() {
-
-  const [isLogged, setIsLogged] = useState(false);
-  const password = "vanand";
+  const password = "Hockey1425";
 
   const checkPass = (pass) => {
     return pass === password;
@@ -13,7 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <FormDialog isLogged = {isLogged} checkPass={checkPass}></FormDialog>
+      <FormDialog isLogged = {false} checkPass={checkPass}></FormDialog>
 
       <Home></Home>
     </div>

@@ -32,7 +32,7 @@ export default function FormDialog(props) {
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please, type your personel password.
+            Please, enter your password.
           </DialogContentText>
           <TextField
             autoFocus
