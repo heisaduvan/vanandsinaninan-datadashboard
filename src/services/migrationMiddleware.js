@@ -216,4 +216,4 @@ function formatAMPM(date) {
   var strTime = hours + " " + ampm;
   return strTime.toUpperCase();
 }
-export { createData };
+export { createData, formatAMPM };

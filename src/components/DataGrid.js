@@ -3,7 +3,7 @@ import { createData } from "../services/migrationMiddleware";
 import { getReports, setPropsForCallAPI } from "../services/tonicService";
 import { Async } from "react-async";
 import Box from "@mui/material/Box";
-
+import { formatAMPM } from "../services/migrationMiddleware";
 export default function CollapsableDataGrid(props) {
   const convertToCSV = (objArray) => {
     var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
@@ -25,25 +25,58 @@ export default function CollapsableDataGrid(props) {
 
   const exportCSVFile = (data) => {
 
+    console.log(data);
+
+    let migratedData = [];
+
+    data.forEach((row, index) => {
+      let obj = {
+        date :'',
+        hour:'',
+        campaign:'',
+        device:'',
+        subid1:'',
+        subid2:'',
+        keyword:'',
+        site:'',
+        clicks:'',
+        revenue:'',
+        rpc:''
+      }
+
+      obj.date = row.date;
+      obj.hour = formatAMPM(new Date(row.timestamp));
+      obj.campaign = row.campaign_id + "_" + row.campaign_name;
+      obj.device = row.device.toUpperCase();
+      obj.subid1 = row.subid1;
+      obj.subid2 = row.subid2;
+      obj.keyword = row.keyword;
+      obj.site = row.site;
+      obj.clicks = row.clicks;
+      obj.revenue = "$" + row.revenueUsd;
+      obj.rpc = parseFloat(row.revenueUsd / row.clicks).toFixed(2);
+
+      migratedData.push(obj);
+    })
+
+
     let headers = {
-      date: "date",
-      campaign_id: "campaign_id",
-      campaign_name: "campaign_name",
-      revenueUsd: "revenueUsd",
-      device: "device",
-      subid1: "subid1",
-      subid2: "subid2",
-      subid3: "subid3",
-      adtitle: "adtitle",
-      clicks: "clicks",
-      network: "network",
-      site: "site",
-      subid4: "subid4",
-      keyword: "keyword",
-      timestamp: "timestamp"
+      date :'Date',
+        hour:'Hour',
+        campaign:'Campaign (Campaign ID and Campaign Name)',
+        device:'Device (Mobile-Tablet-Desktop)',
+        subid1:'SubId1',
+        subid2:'SubId2',
+        keyword:'Keyword',
+        site:'Site',
+        clicks:'Clicks',
+        revenue:'Revenue',
+        rpc:'RPC (Revenue/Clicks)'
     }
-    data.unshift(headers);
-    let csv = convertToCSV(data);
+
+    migratedData.unshift(headers);
+    
+    let csv = convertToCSV(migratedData);
 
     let exportedFilename = "Intraday Reporting.csv";
 
