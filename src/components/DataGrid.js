@@ -25,8 +25,6 @@ export default function CollapsableDataGrid(props) {
 
   const exportCSVFile = (data) => {
 
-    console.log(data);
-
     let migratedData = [];
 
     data.forEach((row, index) => {

@@ -91,7 +91,6 @@ const createData = (_reportsTracking) => {
     item["RPC"] = +parseFloat(rpcValue).toFixed(2);
   });
 
-  console.log(arr);
   return arr;
 };
 
