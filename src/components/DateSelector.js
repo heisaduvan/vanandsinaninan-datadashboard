@@ -22,37 +22,58 @@ const monthNames = [
   "November",
   "December",
 ];
+
+const getMonthName = (date) => {
+  return monthNames[date.getMonth()];
+};
+
 export default function DateSelector(props) {
   const [dateSelectedIndex, setDateSelectedIndex] = useState(0);
 
   const createDateItems = () => {
-    const _date = new Date();
+    const _today = new Date();
     const monthName = monthNames[_date.getMonth()];
-    let today = "Today (" + monthName + " " + _date.getDate() + ")";
+
+    let today = "Today (" + getMonthName(_today) + " " + _today.getDate() + ")";
+
+    let _yesterday = new Date();
+    _yesterday.setDate(_yesterday.getDate() - 1);
+
     let yesterday =
-      "Yesterday (" + monthName + " " + (_date.getDate() - 1) + ")";
+      "Yesterday (" + getMonthName(_yesterday) + " " + _yesterday.getDate() + ")";
+
+
+    let _3daysAgo = new Date();
+    _3daysAgo.setDate(_3daysAgo.getDate() - 3);
+
     let past3Days =
       "Past 3 Days (" +
-      monthName +
+      getMonthName(_3daysAgo) +
       " " +
-      (_date.getDate() - 3) +
+      _3daysAgo.getDate() +
       " - " +
-      monthName +
+      getMonthName(_yesterday) +
       " " +
-      (_date.getDate() - 1) +
+      _yesterday.getDate() +
       ")";
+
+
+    let _7daysAgo = new Date();
+    _7daysAgo.setDate(_7daysAgo.getDate() -7);
+
     let past7Days =
       "Past 7 Days (" +
-      monthName +
+      getMonthName(_7daysAgo) +
       " " +
-      (_date.getDate() - 6) +
+      _7daysAgo.getDate() +
       "-" +
-      monthName +
+      getMonthName(_yesterday) +
       " " +
-      (_date.getDate() - 1) +
+     _yesterday.getDate() +
       ")";
+
     let Mtd =
-      "MTD (" + monthName + " 1 - " + monthName + " " + _date.getDate() + ")";
+      "MTD (" + monthName + " 1 - " + monthName + " " + _today.getDate() + ")";
 
     let customDate = "Use custom date range";
 
@@ -64,30 +85,30 @@ export default function DateSelector(props) {
   const handleChange = (event) => {
     setDateSelectedIndex(event.target.value);
 
-    if(event.target.value === 0){
+    if (event.target.value === 0) {
       props.changeDate(new Date());
     }
-    else if(event.target.value === 1){
-      props.changeDate(new Date(new Date().getTime() - 24*60*60*1000));
+    else if (event.target.value === 1) {
+      props.changeDate(new Date(new Date().getTime() - 24 * 60 * 60 * 1000));
     }
-    else{
+    else {
       let start;
       let end;
-      if(event.target.value === 2){
-        start = new Date(new Date().getTime() - 3*24*60*60*1000);
-        end = new Date(new Date().getTime() - 24*60*60*1000);
-        props.changeDateRange(start,end);       
+      if (event.target.value === 2) {
+        start = new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000);
+        end = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        props.changeDateRange(start, end);
       }
-      else if(event.target.value === 3){
-        start = new Date(new Date().getTime() - 6*24*60*60*1000);
-        end = new Date(new Date().getTime() - 24*60*60*1000);
-        props.changeDateRange(start,end);   
+      else if (event.target.value === 3) {
+        start = new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000);
+        end = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        props.changeDateRange(start, end);
       }
-      else if(event.target.value === 4){
+      else if (event.target.value === 4) {
         let m = new Date();
         start = new Date(m.getFullYear(), m.getMonth(), 1);
-        end = new Date(new Date().getTime() - 24*60*60*1000);
-        props.changeDateRange(start,end);
+        end = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        props.changeDateRange(start, end);
       }
     }
   };
@@ -99,13 +120,13 @@ export default function DateSelector(props) {
     const startMonthName = monthNames[startDate.getMonth()];
     const endMonthName = monthNames[endDate.getMonth()];
 
-    let string = 'Between ' + startMonthName + " "+ startDate.getDate() + " and " + endMonthName + " "+ endDate.getDate();
-    if(datePickerItems.length === 7){
-        let items = [...datePickerItems];
-        items[6] = string;
-        setDatePickerItems([...items]);
-    }else{
-        setDatePickerItems([...datePickerItems, string]);
+    let string = 'Between ' + startMonthName + " " + startDate.getDate() + " and " + endMonthName + " " + endDate.getDate();
+    if (datePickerItems.length === 7) {
+      let items = [...datePickerItems];
+      items[6] = string;
+      setDatePickerItems([...items]);
+    } else {
+      setDatePickerItems([...datePickerItems, string]);
     }
     setDateSelectedIndex(6);
 
@@ -136,7 +157,7 @@ export default function DateSelector(props) {
             </Select>
           </FormControl>
         </Grid>
-        {dateSelectedIndex === 5 && <CustomDatePicker submitCustomDateRange = {submitCustomDateRange}></CustomDatePicker>}
+        {dateSelectedIndex === 5 && <CustomDatePicker submitCustomDateRange={submitCustomDateRange}></CustomDatePicker>}
       </Grid>
     </Grid>
   );
