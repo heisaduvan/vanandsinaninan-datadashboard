@@ -32,7 +32,7 @@ export default function DateSelector(props) {
 
   const createDateItems = () => {
     const _today = new Date();
-    const monthName = monthNames[_date.getMonth()];
+    // const monthName = monthNames[_date.getMonth()];
 
     let today = "Today (" + getMonthName(_today) + " " + _today.getDate() + ")";
 
@@ -73,7 +73,7 @@ export default function DateSelector(props) {
       ")";
 
     let Mtd =
-      "MTD (" + monthName + " 1 - " + monthName + " " + _today.getDate() + ")";
+      "MTD (" + getMonthName(_today) + " 1 - " + getMonthName(_today) + " " + _today.getDate() + ")";
 
     let customDate = "Use custom date range";
 
