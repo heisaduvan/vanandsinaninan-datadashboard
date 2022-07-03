@@ -1,4 +1,4 @@
-import { formatAMPM } from "../services/migrationMiddleware";
+import { formatAMPMWithMinutes } from "../services/migrationMiddleware";
 
 const convertToCSV = (objArray) => {
   var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
@@ -36,7 +36,7 @@ const exportCSVFile = (data) => {
     };
 
     obj.date = row.date;
-    obj.hour = formatAMPM(new Date(row.timestamp));
+    obj.hour = formatAMPMWithMinutes(new Date(row.timestamp));
     obj.campaign = row.campaign_id + "_" + row.campaign_name;
     obj.device = row.device.toUpperCase();
     obj.subid1 = row.subid1;
