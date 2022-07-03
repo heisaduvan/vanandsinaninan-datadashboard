@@ -1,3 +1,6 @@
+body{
+  min-width: "1010px";
+}
 .App {
   text-align: center;
 }
