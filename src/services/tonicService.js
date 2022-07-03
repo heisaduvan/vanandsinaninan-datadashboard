@@ -1,5 +1,3 @@
-import { SettingsBackupRestoreSharp } from "@material-ui/icons";
-
 const reportTrackingPath =
   "https://tonicapiv2-56z35.ondigitalocean.app/reports";
 
@@ -13,16 +11,6 @@ const getDateFormat = (date) => {
     (dd > 9 ? "" : "0") + dd,
   ].join("-");
 };
-
-// let dateRange = [];
-// let date = null;
-// let useDateRange = false;
-
-function setPropsForCallAPI(_dateRange, _date, _useDateRange) {
-  // dateRange = _dateRange;
-  // date = _date;
-  // useDateRange = _useDateRange;
-}
 
 function getReports(dateRange, date, useDateRange) {
   let path =
@@ -40,4 +28,4 @@ function getReports(dateRange, date, useDateRange) {
     .then((res) => res.json());
 }
 
-export { getReports, setPropsForCallAPI };
+export { getReports };

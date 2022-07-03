@@ -7,7 +7,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import AppBar from "./AppBar";
 import DateSelector from "./DateSelector";
-import UpdateInfos from "./UpdateInfos";
 import CollapsableDataGrid from "./DataGrid";
 const appTheme = createTheme();
 
@@ -15,6 +14,7 @@ export default function Home(props) {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [date, setDate] = useState(new Date());
   const [useDateRange, setUseDateRange] = useState(false);
+
   const changeDateRange = (start, end) => {
     setDateRange([start, end]);
     setUseDateRange(true);
@@ -64,12 +64,11 @@ export default function Home(props) {
                 changeDateRange={changeDateRange}
                 changeDate={changeDate}
               ></DateSelector>
-              <Grid item xs={6}>
-                <UpdateInfos />
-              </Grid>
-              <Grid item xs={12}>
-                <CollapsableDataGrid dateRange = {dateRange} date={date} useDateRange = {useDateRange}></CollapsableDataGrid>
-              </Grid>
+              <CollapsableDataGrid
+                dateRange={dateRange}
+                date={date}
+                useDateRange={useDateRange}
+              ></CollapsableDataGrid>
             </Grid>
           </Container>
         </Box>

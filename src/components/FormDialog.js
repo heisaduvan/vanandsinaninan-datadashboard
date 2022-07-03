@@ -15,10 +15,10 @@ export default function FormDialog(props) {
     setPass(e.target.value);
   };
   const handleClose = () => {
-    if(props.checkPass(pass)){
-        setOpen(false);
-    }else{
-        alert("Password was wrong!");
+    if (props.checkPass(pass)) {
+      setOpen(false);
+    } else {
+      alert("Password was wrong!");
     }
   };
 
@@ -31,9 +31,7 @@ export default function FormDialog(props) {
       >
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please, enter your password.
-          </DialogContentText>
+          <DialogContentText>Please, enter your password.</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
@@ -43,7 +41,13 @@ export default function FormDialog(props) {
             fullWidth
             variant="standard"
             value={pass}
-            onChange={(e) => {handlePass(e)}}
+            onChange={(e) => {
+              handlePass(e);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") 
+                  handleClose();
+            }}
           />
         </DialogContent>
         <DialogActions>

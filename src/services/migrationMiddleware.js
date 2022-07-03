@@ -1,6 +1,8 @@
-// const reportsTracking = require("../assets/reportsTracking.json");
 let reportsTracking = [];
 const createData = (_reportsTracking) => {
+  _reportsTracking = _reportsTracking.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
   reportsTracking = _reportsTracking;
   let id = 0;
   let arr = [];
@@ -105,7 +107,6 @@ const getDailyReports = (objDaysAndTotalRevenueAndClicks, campaign_id) => {
   let days = Object.keys(dayObj);
   let revenues = Object.values(dayObj);
   let clicks = Object.values(dayObj2);
-
   let dailyReport = [];
   days.forEach((day, index) => {
     let obj = {
@@ -206,13 +207,22 @@ const groupBy = function (xs, key, value) {
 
 function formatAMPM(date) {
   var hours = date.getHours();
-  // var minutes = date.getMinutes();
   var ampm = hours >= 12 ? "pm" : "am";
   hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  // minutes = minutes < 10 ? '0'+minutes : minutes;
-  // var strTime = hours + ':' + minutes + ' ' + ampm;
+  hours = hours ? hours : 12;
   var strTime = hours + " " + ampm;
   return strTime.toUpperCase();
 }
-export { createData, formatAMPM };
+
+function formatAMPMWithMinutes(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime.toUpperCase();
+}
+
+export { createData, formatAMPM, formatAMPMWithMinutes };

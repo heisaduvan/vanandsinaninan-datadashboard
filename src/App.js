@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <FormDialog isLogged = {false} checkPass={checkPass}></FormDialog>
+      {/* <FormDialog isLogged = {false} checkPass={checkPass}></FormDialog> */}
 
       <Home></Home>
     </div>
